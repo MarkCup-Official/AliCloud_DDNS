@@ -1,4 +1,5 @@
-import config,requests,time
+import config,requests,time,logging
+from datetime import datetime
 
 from alibabacloud_alidns20150109.client import Client as Alidns20150109Client
 from alibabacloud_tea_openapi import models as open_api_models
@@ -165,4 +166,11 @@ def UpdateDomainRecord(recordid,record,type,value,ttl):
     return False
 
 if __name__=="__main__":
+    logging.basicConfig(filename='log.log', level=logging.INFO)
+    # 重定向print函数
+    def print_to_log(*args, **kwargs):
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message = ' '.join(map(str, args))
+        logging.info(f"[{current_time}] {message}", **kwargs)
+    print = print_to_log
     MainLoop()
